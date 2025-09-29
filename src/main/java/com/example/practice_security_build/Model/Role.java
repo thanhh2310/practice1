@@ -7,15 +7,22 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
 @Entity
 @NoArgsConstructor
 @Getter
 @Setter
-public class Role {
+public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
+
+
     String roleName;
 
+    @Override
+    public String getAuthority() {
+        return roleName;
+    }
 }
