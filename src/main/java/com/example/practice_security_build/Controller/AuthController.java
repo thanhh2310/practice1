@@ -48,4 +48,10 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("Error","Invalid "));
         }
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody LoginRequest request) throws Exception {
+        userService.registerUser(request.getUsername(), request.getPassword());
+        return ResponseEntity.ok("Create successfully!");
+    }
 }
