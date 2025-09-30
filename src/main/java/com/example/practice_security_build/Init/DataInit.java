@@ -37,6 +37,7 @@ public class DataInit {
             User user = new User();
             user.setUsername("admin");
             user.setPassword(passwordEncoder.encode("admin"));
+            user.setRoleName(RoleName.ROLE_ADMIN.name());
             Role adminRole = roleRepository.findByRoleName(RoleName.ROLE_ADMIN.name());
             user.setRoles(List.of(adminRole));
 
