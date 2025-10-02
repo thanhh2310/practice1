@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -25,6 +26,18 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    public User processOAuthPostLogin(String email) {
+        User user = userRepository.findByUsername(email);
+        if(user == null){
+            user = new User();
+            user.setUsername(email);
+            Role userRole = roleRepository.findByRoleName(RoleName.ROLE_USER.name());
+            user.setRoles(List.of(userRole));
+            userRepository.save(user);
+        }
+        return user;
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
@@ -36,7 +49,7 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public User registerUser(String username, String password) throws Exception {
+    public void registerUser(String username, String password) throws Exception {
         if (userRepository.findByUsername(username) != null){
             throw new Exception("User da ton tai");
         }
@@ -52,7 +65,6 @@ public class UserService implements UserDetailsService {
         user.setRoleName(RoleName.ROLE_USER.name());
         user.setRoles(List.of(userRole));
         userRepository.save(user);
-        return user;
     }
 
     public List<User> getAllUser(){
